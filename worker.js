@@ -1,5 +1,6 @@
-import PornHub from './phub.js';
 import sjs from './s.js';
+import proxy from './proxy.js';
+import PornHub from './phub.js';
 
 export default {
     async fetch(request, _env) {
@@ -31,10 +32,14 @@ export default {
         const uri = new URL(request.url);
         let hostname = 'https://' + uri.hostname;
 
-        if (uri.pathname.startsWith('/s.js')) {
+        if (uri.pathname.startsWith('/proxy/')) {
+            return proxy.fetch(hostname, request, fp, outHeaders);
+        } 
+        else if (uri.pathname.startsWith('/s.js')) {
             return sjs.plain(hostname);
-        } else if (uri.pathname.startsWith('/phub')) {
-            return new PornHub().fetch(hostname+'/phub', request, fp, outHeaders);
+        } 
+        else if (uri.pathname.startsWith('/phub')) {
+            return new PornHub().fetch(hostname, request, fp, outHeaders);
         }
         else if (uri.pathname.startsWith('/sisi')) {
             return new Response(JSON.stringify({
@@ -42,7 +47,7 @@ export default {
                 channels: [
                     {
                         "title": "pornhub.com",
-                        "playlist_url": hostname+'/phub'
+                        "playlist_url": `${hostname}/phub`
                     }
                 ]
             }), {

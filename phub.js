@@ -16,7 +16,7 @@ class PornHub {
             { headers: { "Content-Type": "text/html" } }
         );*/
 
-        if (url.indexOf('viewkey=') >= 0) {
+        if (url.indexOf('viewkey=') >= 0) { 
             outBody = this.StreamLinks(hostname, await fr.text());
         } else {
             outBody = {
@@ -94,9 +94,9 @@ class PornHub {
 
             const pl = {
                 name: title,
-                video: hostname + '/view_video.php?viewkey=' + vkey,
-                picture: img,
-                preview: m("data-mediabook=\"(https?://[^\"]+)\""),
+                video: hostname + '/phub/view_video.php?viewkey=' + vkey,
+                picture: `${hostname}/proxy/${img}`,
+                preview: `${hostname}/proxy/` + m("data-mediabook=\"(https?://[^\"]+)\""),
                 time: m("<var class=\"duration\">([^<]+)</var>") || m("class=\"time\">([^<]+)<") || m("class=\"videoDuration floatLeft\">([^<]+)<"),
                 json: true
             };
@@ -114,7 +114,7 @@ class PornHub {
     StreamLinks(hostname, html) {
         return {
             qualitys: {
-                auto: this.getDirectLinks(html).replace(/\\/g, "").replace("///", "//")
+                auto: `${hostname}/proxy/` + this.getDirectLinks(html).replace(/\\/g, "").replace("///", "//")
             },
             recomends: this.Playlist(hostname, html, true)
         };
@@ -157,6 +157,7 @@ class PornHub {
     Menu(host, params) {
         var sort = params.get("o") || '';
         var c = params.get("c") || '';
+        host = host + '/phub';
 
         var sortmenu = [{
                 title: "Недавно в избранном",
