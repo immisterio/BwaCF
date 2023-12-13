@@ -1,6 +1,6 @@
 class PornHub {
 
-    async fetch(hostname, request, fp, outHeaders) {
+    async fetch(init, request, fp, outHeaders) {
         let outBody;
         let uri = new URL(request.url);
         let params = uri.searchParams;
@@ -17,11 +17,11 @@ class PornHub {
         );*/
 
         if (url.indexOf('viewkey=') >= 0) { 
-            outBody = this.StreamLinks(hostname, await fr.text());
+            outBody = this.StreamLinks(init, await fr.text());
         } else {
             outBody = {
-                menu: this.Menu(hostname, params),
-                list: this.Playlist(hostname, await fr.text(), false)
+                menu: this.Menu(init, params),
+                list: this.Playlist(init, await fr.text(), false)
             };
         }
 
@@ -45,7 +45,7 @@ class PornHub {
     }
 
 
-    Playlist(hostname, html, related) {
+    Playlist(init, html, related) {
         let videoCategory = null;
         const playlists = [];
 
@@ -94,9 +94,9 @@ class PornHub {
 
             const pl = {
                 name: title,
-                video: hostname + '/phub/view_video.php?viewkey=' + vkey,
-                picture: `${hostname}/proxy/${img}`,
-                preview: `${hostname}/proxy/` + m("data-mediabook=\"(https?://[^\"]+)\""),
+                video: init.host + '/phub/view_video.php?viewkey=' + vkey,
+                picture: init.rsize + img,
+                preview: init.proxy + m("data-mediabook=\"(https?://[^\"]+)\""),
                 time: m("<var class=\"duration\">([^<]+)</var>") || m("class=\"time\">([^<]+)<") || m("class=\"videoDuration floatLeft\">([^<]+)<"),
                 json: true
             };
@@ -111,12 +111,12 @@ class PornHub {
     }
 
 
-    StreamLinks(hostname, html) {
+    StreamLinks(init, html) {
         return {
             qualitys: {
-                auto: `${hostname}/proxy/` + this.getDirectLinks(html).replace(/\\/g, "").replace("///", "//")
+                auto: init.proxy + this.getDirectLinks(html).replace(/\\/g, "").replace("///", "//")
             },
-            recomends: this.Playlist(hostname, html, true)
+            recomends: this.Playlist(init, html, true)
         };
     }
 
@@ -154,10 +154,10 @@ class PornHub {
     }
 
 
-    Menu(host, params) {
+    Menu(init, params) {
         var sort = params.get("o") || '';
         var c = params.get("c") || '';
-        host = host + '/phub';
+        var host = init.host + '/phub';
 
         var sortmenu = [{
                 title: "Недавно в избранном",

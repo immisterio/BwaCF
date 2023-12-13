@@ -31,17 +31,23 @@ export default {
 
         const uri = new URL(request.url);
         let hostname = 'https://' + uri.hostname;
+        //let init = { host: hostname, proxy: `${hostname}/proxy/`, rsize: `${hostname}/rsize/` }
+
+        let init = { host: hostname, proxy: '', rsize: '' }
 
         if (uri.pathname.startsWith('/proxy/')) {
             return proxy.fetch(hostname, request, fp, outHeaders);
-        } 
+        }
         else if (uri.pathname.startsWith('/s.js')) {
-            return sjs.plain(hostname);
+            return sjs.plain(hostname, outHeaders);
         } 
         else if (uri.pathname.startsWith('/phub')) {
-            return new PornHub().fetch(hostname, request, fp, outHeaders);
+            return new PornHub().fetch(init, request, fp, outHeaders);
         }
-        else if (uri.pathname.startsWith('/sisi')) {
+        else if (uri.pathname.startsWith('/sisi')) 
+        {
+            outHeaders.set("content-type", 'application/json; charset=utf-8');
+
             return new Response(JSON.stringify({
                 title: "Дрочильня",
                 channels: [
@@ -50,17 +56,9 @@ export default {
                         "playlist_url": `${hostname}/phub`
                     }
                 ]
-            }), {
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8"
-                }
-            });
+            }), { headers: outHeaders });
         }
 
-        return new Response('error', {
-            headers: {
-                "Content-Type": "text/html"
-            }
-        });
+        return new Response('api work', { headers: outHeaders });
     }
 }
