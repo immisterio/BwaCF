@@ -1,4 +1,5 @@
 import PornHub from './phub.js';
+import sjs from './s.js';
 
 export default {
     async fetch(request, _env) {
@@ -28,9 +29,27 @@ export default {
         fp.headers['user-agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36';
 
         const uri = new URL(request.url);
+        let hostname = 'https://' + uri.hostname;
 
-        if (uri.pathname.startsWith('/phub')) {
-            return new PornHub().fetch(request, fp, outHeaders);
+        if (uri.pathname.startsWith('/s.js')) {
+            return sjs.plain(hostname);
+        } else if (uri.pathname.startsWith('/phub')) {
+            return new PornHub().fetch(hostname+'/phub', request, fp, outHeaders);
+        }
+        else if (uri.pathname.startsWith('/sisi')) {
+            return new Response(JSON.stringify({
+                title: "Дрочильня",
+                channels: [
+                    {
+                        "title": "pornhub.com",
+                        "playlist_url": hostname+'/phub'
+                    }
+                ]
+            }), {
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8"
+                }
+            });
         }
 
         return new Response('error', {

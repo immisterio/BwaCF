@@ -1,10 +1,9 @@
 class PornHub {
 
-    async fetch(request, fp, outHeaders) {
+    async fetch(hostname, request, fp, outHeaders) {
         let outBody;
         let uri = new URL(request.url);
         let params = uri.searchParams;
-        let hostname = 'https://' + uri.hostname + '/phub';
         let url = request.url.substr(8); 
         url = decodeURIComponent(url.substr(url.indexOf('/') + 5));
         url = this.fixUrl(url, params);
@@ -39,9 +38,10 @@ class PornHub {
         if (url.indexOf('search=') >= 0) {
             return "https://rt.pornhub.com/video/search?search=" + encodeURIComponent(params.get('search')) + (params.has('pg') ? `&page=${params.get('pg')}` : '');
         } else if (url.indexOf('viewkey=') >= 0) {
-            return "https://rt.pornhub.com" + url.replace('pg=', 'page=');
+            return "https://rt.pornhub.com" + url;
         }
-        return "https://rt.pornhub.com/video" + url.replace('pg=', 'page=');
+
+        return "https://rt.pornhub.com/video" + url.replace('pg=', 'page=').replace('c=&', '').replace('o=&', '');
     }
 
 
@@ -540,7 +540,7 @@ class PornHub {
                 playlist_url: "submenu",
                 submenu: catmenu
             }
-        ];
+        ]
     }
 }
 
