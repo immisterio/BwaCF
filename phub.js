@@ -95,7 +95,7 @@ class PornHub {
             const pl = {
                 name: title,
                 video: init.host + '/phub/view_video.php?viewkey=' + vkey,
-                picture: init.rsize + img,
+                picture: img,
                 preview: init.proxy + m("data-mediabook=\"(https?://[^\"]+)\""),
                 time: m("<var class=\"duration\">([^<]+)</var>") || m("class=\"time\">([^<]+)<") || m("class=\"videoDuration floatLeft\">([^<]+)<"),
                 json: true

@@ -31,9 +31,7 @@ export default {
 
         const uri = new URL(request.url);
         let hostname = 'https://' + uri.hostname;
-        //let init = { host: hostname, proxy: `${hostname}/proxy/`, rsize: `${hostname}/rsize/` }
-
-        let init = { host: hostname, proxy: `${hostname}/proxy/`, rsize: '' }
+        let init = { host: hostname, proxy: `${hostname}/proxy/`, rsize: `${hostname}/rsize/` }
 
         if (uri.pathname.startsWith('/proxy/')) {
             return proxy.fetch(hostname, request, fp, outHeaders);
