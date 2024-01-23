@@ -1,6 +1,7 @@
 import sjs from './s.js';
 import proxy from './proxy.js';
 import PornHub from './phub.js';
+import BongaCams from './bgs.js';
 
 export default {
     async fetch(request, _env) {
@@ -43,6 +44,9 @@ export default {
         else if (uri.pathname.startsWith('/phub')) {
             return new PornHub().fetch(init, request, fp, outHeaders);
         }
+		else if (uri.pathname.startsWith('/bgs')) {
+            return new BongaCams().fetch(init, request, fp, outHeaders);
+        }
         else if (uri.pathname.startsWith('/sisi')) 
         {
             outHeaders.set("content-type", 'application/json; charset=utf-8');
@@ -53,6 +57,10 @@ export default {
                     {
                         "title": "pornhub.com",
                         "playlist_url": `${hostname}/phub`
+                    },
+					{
+                        "title": "bongacams.com",
+                        "playlist_url": `${hostname}/bgs`
                     }
                 ]
             }), { headers: outHeaders });
