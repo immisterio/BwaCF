@@ -112,9 +112,13 @@ class PornHub {
 
 
     StreamLinks(init, html) {
+        var link = this.getDirectLinks(html).replace(/\\/g, "").replace("///", "//");
         return {
             qualitys: {
-                auto: init.proxy + this.getDirectLinks(html).replace(/\\/g, "").replace("///", "//")
+                auto: link
+            },
+            qualitys_proxy: {
+                auto: init.proxy + link
             },
             recomends: this.Playlist(init, html, true)
         };
