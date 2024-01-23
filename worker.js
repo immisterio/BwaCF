@@ -7,7 +7,8 @@ export default {
 
         let reqHeaders = new Headers(request.headers),
             outHeaders = new Headers({
-                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Origin": reqHeaders.get('Origin') || reqHeaders.get('Referer') || "*",
+                "Access-Control-Allow-Credentials": "true",
                 "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
                 "Access-Control-Allow-Headers": reqHeaders.get('Access-Control-Allow-Headers') || "Accept, Authorization, Cache-Control, Content-Type, DNT, If-Modified-Since, Keep-Alive, Origin, User-Agent, X-Requested-With, Token, x-access-token"
             });
